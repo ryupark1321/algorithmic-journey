@@ -2,7 +2,8 @@
 #include <limits>
 #include <queue>
 
-std::vector<int> BFS(std::vector<std::vector<int>> graph, int s){
+// adjacency matrix version
+void BFS(std::vector<std::vector<int>> graph, int s){
 	int num_ver = graph.size();
 	std::vector<bool> explored_vector (num_ver, false);
 	std::vector<int> length_vector (num_ver, std::numeric_limits<int>::max());
@@ -23,8 +24,24 @@ std::vector<int> BFS(std::vector<std::vector<int>> graph, int s){
 			}
 		}
 	}
-	return length_vector;
+	return ;
 }
+
+//adjacency list version
+void al_BFS(std::vector<int*> vertices, std::vector<int*> edges, int s){
+	int num_vertices = vertices.size();
+	std::vector<bool> explored(num_vertices, false);
+	explored[s-1] = true;
+	std::queue<int*> q;
+	q.push(vertices[s-1]);
+	while (!q.empty()){
+		int* v = q.front();
+		q.pop();
+	}
+
+	return ;
+}
+
 
 std::vector<int> UCC(std::vector<std::vector<int>> graph){
 	int num_ver = graph.size();

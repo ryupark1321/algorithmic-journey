@@ -28,20 +28,24 @@ void BFS(std::vector<std::vector<int>> graph, int s){
 }
 
 //adjacency list version
-void al_BFS(std::vector<int*> vertices, std::vector<int*> edges, int s){
-	int num_vertices = vertices.size();
-	std::vector<bool> explored(num_vertices, false);
-	explored[s-1] = true;
-	std::queue<int*> q;
+void al_BFS(std::vector<int> vertices, std::vector<int> edges, int s){
+	int num_vertices = vertices.size(); 
+	std::vector<bool> explored(num_vertices, false); // list that represents whether a vertex i at index i-1 has been explored
+	explored[s-1] = true; // starting vertex is explored
+	std::queue<int> q;
 	q.push(vertices[s-1]);
 	while (!q.empty()){
-		int* v = q.front();
+		int v = q.front();
 		q.pop();
+		for (int i = vertices[v]; i < vertices[v+1]; i++){ //for all edges from v
+			if (!explored[edges[i]]){ // if not explored, explore then add to queue
+				explored[edges[i]] = true;
+				q.push(edges[i]);
+			}
+		}
 	}
-
 	return ;
 }
-
 
 std::vector<int> UCC(std::vector<std::vector<int>> graph){
 	int num_ver = graph.size();
@@ -67,3 +71,30 @@ std::vector<int> UCC(std::vector<std::vector<int>> graph){
 	}
 	return cc_vector;
 }
+
+std::vector<int> al_UCC(std::vector<int> vertices, std::vector<int> edges, int s){
+	int num_ver = vertices.size();
+	int num_cc = 0;
+	std::vector<int> cc_vector(num_ver,0);
+	for (int i = 0; i < num_ver; i++){
+		if (cc_vector[i] == 0){
+			num_cc++;
+			cc_vector[i] = num_cc;
+			std::queue<int> q;
+			q.push(i+1);
+			while(!q.empty()){
+				int v = q.front();
+				q.pop();
+				for (int j = vertices[v]; j < vertices[v+1]; j++){
+					int voi = edges[j];
+					if(cc_vector[voi] == 0){				
+						q.push(voi);
+						cc_vector[voi] = num_cc;
+					}
+				}
+			}
+		}
+	}
+	return cc_vector;
+}
+
